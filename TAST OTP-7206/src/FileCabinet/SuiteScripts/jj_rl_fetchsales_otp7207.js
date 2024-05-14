@@ -41,14 +41,14 @@
      const get = (requestParams) => {
          try {
              if(requestParams.salesId==null){
-                 var salesOrderSearch=search.load({
+                 let salesOrderSearch=search.load({
                      id:'customsearch_jj_opensalesorder_otp7207'
                  });
-                 var searchObj=salesOrderSearch.run().getRange({
+                 let searchObj=salesOrderSearch.run().getRange({
                      start:0,
                      end:100
                  });
-                 for (var i=0; i< searchObj.length;i++){
+                 for (let i=0; i< searchObj.length;i++){
                      objArr[i]=[
                          searchObj[i].getValue('internalid')+" "+
                          searchObj[i].getValue('tranid')+" "+
@@ -60,45 +60,45 @@
                  return JSON.stringify(objArr);
              }
              else{
-                 var order=search.lookupFields({
+                 let order=search.lookupFields({
                      type:search.Type.SALES_ORDER,
                      id:requestParams.salesId,
                      columns:["internalid"]
                  });
-                 var internalId=order["internalid"];
-                 log.debug(internalId);
+                 let internalId=order["internalid"];
+                 
                  if(internalId==null){
                      return("RESULT NOT FOUND");
                  }
                  else{
-                     var salesRec = record.load({
+                     let salesRec = record.load({
                          type: record.Type.SALES_ORDER,
                          id:requestParams.salesId,
                          isDynamic:true
                      });
-                     var lineCount=salesRec.getLineCount({
+                     let lineCount=salesRec.getLineCount({
                          sublistId:'item'
                      });
-                     for(var i=0;i< lineCount;i++) {
-                         var Item = salesRec.getSublistText({
+                     for(let i=0;i< lineCount;i++) {
+                         let Item = salesRec.getSublistText({
                              sublistId: 'item',
                              fieldId: 'item',
                              line: i
                          });
                          log.debug(Item);
-                         var Quantity = salesRec.getSublistValue({
+                         let Quantity = salesRec.getSublistValue({
                              sublistId: 'item',
                              fieldId: 'quantity',
                              line: i
                          });
                          log.debug(Quantity);
-                         var Rate = salesRec.getSublistValue({
+                         let Rate = salesRec.getSublistValue({
                              sublistId: 'item',
                              fieldId: 'rate',
                              line: i
                          });
                          log.debug(Rate);
-                         var Amount = salesRec.getSublistValue({
+                         let Amount = salesRec.getSublistValue({
                              sublistId: 'item',
                              fieldId: 'amount',
                              line: i

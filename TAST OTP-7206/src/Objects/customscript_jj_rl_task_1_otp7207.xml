@@ -1,0 +1,22 @@
+<restlet scriptid="customscript_jj_rl_task_1_otp7207">
+  <description></description>
+  <isinactive>F</isinactive>
+  <name>JJ RL Fetching Sales Order OTP-7207</name>
+  <notifyadmins>F</notifyadmins>
+  <notifyemails></notifyemails>
+  <notifyowner>T</notifyowner>
+  <notifyuser>F</notifyuser>
+  <scriptfile>[/SuiteScripts/JobinandJismi/TaskOTP/jj_rl_task_1_otp7207.js]</scriptfile>
+  <scriptdeployments>
+    <scriptdeployment scriptid="customdeploy_jj_rl_task_1_otp7207">
+      <allemployees>T</allemployees>
+      <allpartners>F</allpartners>
+      <allroles>T</allroles>
+      <audslctrole></audslctrole>
+      <isdeployed>T</isdeployed>
+      <loglevel>ERROR</loglevel>
+      <status>RELEASED</status>
+      <title>JJ RL Fetching Sales Order OTP-7207</title>
+    </scriptdeployment>
+  </scriptdeployments>
+</restlet>
