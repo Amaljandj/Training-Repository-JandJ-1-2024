@@ -21,12 +21,12 @@
  *
  *
  ********************************************************************************************************************/
-define(['N/record', 'N/search'],
+define(['N/record', 'N/error'],
     /**
  * @param{record} record
- * @param{search} search
+ * @param{error} error
  */
-    (record, search) => {
+    (record, error) => {
         
 
         /**
@@ -39,11 +39,19 @@ define(['N/record', 'N/search'],
          * @since 2015.2
          */
         const post = (requestBody) => {
+            let salesOrderId = requestBody.salesOrderId
+            let itemDetails = requestBody.itemDetails;
+
+            if (!salesOrderId || !itemDetails || !Array.isArray(itemDetails)) {
+                throw error.create({
+                    name: 'MISSING_REQUIRED_PARAMETERS',
+                    message: 'Sales Order ID and item details are required and item details should be an array.',
+                    notifyOff: false
+                });
+            }
             try {
                 if(requestBody){
-                    let salesOrderId = requestBody.salesOrderId;
-                    log.debug('salesOrderId',salesOrderId);
-                   let itemDetails = requestBody.itemDetails;
+                
 
                     let salesOrderFulfill = record.transform({
                         fromType : record.Type.SALES_ORDER,
@@ -88,7 +96,7 @@ define(['N/record', 'N/search'],
                     return itemFulfill
                 }
             } catch (error) {
-                log.debug(error.message)
+                return(error.message)
             }
             
         }
