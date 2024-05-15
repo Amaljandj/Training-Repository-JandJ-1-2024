@@ -2,36 +2,13 @@
  * @NApiVersion 2.1
  * @NScriptType Restlet
  */
-define(['N/record', 'N/search', 'N/error'],
+define(['N/record', 'N/search'],
     /**
  * @param{record} record
  * @param{search} search
  */
-    (record, search,error) => {
-        /**
-         * Defines the function that is executed when a GET request is sent to a RESTlet.
-         * @param {Object} requestParams - Parameters from HTTP request URL; parameters passed as an Object (for all supported
-         *     content types)
-         * @returns {string | Object} HTTP response body; returns a string when request Content-Type is 'text/plain'; returns an
-         *     Object when request Content-Type is 'application/json' or 'application/xml'
-         * @since 2015.2
-         */
-        const get = (requestParams) => {
-
-        }
-
-        /**
-         * Defines the function that is executed when a PUT request is sent to a RESTlet.
-         * @param {string | Object} requestBody - The HTTP request body; request body are passed as a string when request
-         *     Content-Type is 'text/plain' or parsed into an Object when request Content-Type is 'application/json' (in which case
-         *     the body must be a valid JSON)
-         * @returns {string | Object} HTTP response body; returns a string when request Content-Type is 'text/plain'; returns an
-         *     Object when request Content-Type is 'application/json' or 'application/xml'
-         * @since 2015.2
-         */
-        const put = (requestBody) => {
-
-        }
+    (record, search) => {
+        
 
         /**
          * Defines the function that is executed when a POST request is sent to a RESTlet.
@@ -46,28 +23,57 @@ define(['N/record', 'N/search', 'N/error'],
             try {
                 if(requestBody){
                     let salesOrderId = requestBody.salesOrderId;
-                    let itemDetails = requestBody.itemDetails;
+                    log.debug('salesOrderId',salesOrderId);
+                   let itemDetails = requestBody.itemDetails;
+
+                    let salesOrderFulfill = record.transform({
+                        fromType : record.Type.SALES_ORDER,
+                        fromId : salesOrderId,
+                        toType : record.Type.ITEM_FULFILLMENT,
+                        isDynamic : true
+                    });
+                    
+                    itemDetails.forEach(itemDetail => {
+                        let lineNum = salesOrderFulfill.findSublistLineWithValue({
+                            sublistId: 'item',
+                            fieldId: 'item',
+                            value: itemDetail.itemId
+                        });
+        
+                        if (lineNum >= 0) {
+                            salesOrderFulfill.selectLine({
+                                sublistId: 'item',
+                                line: lineNum
+                            });
+        
+                            salesOrderFulfill.setCurrentSublistValue({
+                                sublistId: 'item',
+                                fieldId: 'quantity',
+                                value: itemDetail.quantity
+                            });
+        
+                            salesOrderFulfill.commitLine({
+                                sublistId: 'item'
+                            });
+                        }
+                    });
+                        
+                        
                     
 
+                    let itemFulfill = salesOrderFulfill.save({
+                        enableSourcing:true,
+                        ignoreMandatoryFields:false
+                    });
+
+                    return itemFulfill
                 }
             } catch (error) {
-                log.debug(error)
+                log.debug(error.message)
             }
             
         }
 
-        /**
-         * Defines the function that is executed when a DELETE request is sent to a RESTlet.
-         * @param {Object} requestParams - Parameters from HTTP request URL; parameters are passed as an Object (for all supported
-         *     content types)
-         * @returns {string | Object} HTTP response body; returns a string when request Content-Type is 'text/plain'; returns an
-         *     Object when request Content-Type is 'application/json' or 'application/xml'
-         * @since 2015.2
-         */
-        const doDelete = (requestParams) => {
-
-        }
-
-        return {get, put, post, delete: doDelete}
+        return {post}
 
     });
