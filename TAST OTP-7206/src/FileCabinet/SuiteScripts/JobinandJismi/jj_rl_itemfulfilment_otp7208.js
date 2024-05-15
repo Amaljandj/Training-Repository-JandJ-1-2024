@@ -2,6 +2,25 @@
  * @NApiVersion 2.1
  * @NScriptType Restlet
  */
+/***************************************************************************************************************
+ *  *  Restlet to Create API for creating the Item Fulfillment
+ *
+ *
+ **************************************************************************************************************
+ *
+ * Author :Jobin and Jismi IT Services
+ *
+ * Date Created :14 -May -2024
+ *
+ * Created By: Amal Mathai,Jobin and Jismi IT Services
+ *
+ * Description :Custom module To Create API for creating the Item Fulfillment
+ *
+ * REVISION HISTORY
+ *
+ *
+ *
+ ********************************************************************************************************************/
 define(['N/record', 'N/search'],
     /**
  * @param{record} record
