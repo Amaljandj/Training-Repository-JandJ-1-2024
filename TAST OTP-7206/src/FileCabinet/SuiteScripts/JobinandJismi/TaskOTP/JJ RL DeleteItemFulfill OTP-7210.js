@@ -2,6 +2,25 @@
  * @NApiVersion 2.1
  * @NScriptType Restlet
  */
+/***************************************************************************************************************
+ *  *  Restlet to Create API for the Deleting the Item fulfillment
+ *
+ *
+ **************************************************************************************************************
+ *
+ * Author :Jobin and Jismi IT Services
+ *
+ * Date Created :15 -May -2024
+ *
+ * Created By: Amal Mathai,Jobin and Jismi IT Services
+ *
+ * Description :Custom module To Create API for the Deleting the Item fulfillment
+ *
+ * REVISION HISTORY
+ *
+ *
+ *
+ ********************************************************************************************************************/
 define(['N/record', 'N/search','N/error'],
     /**
  * @param{record} record
