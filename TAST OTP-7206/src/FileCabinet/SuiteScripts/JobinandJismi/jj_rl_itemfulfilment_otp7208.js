@@ -39,17 +39,16 @@ define(['N/record', 'N/error'],
          * @since 2015.2
          */
         const post = (requestBody) => {
-            let salesOrderId = requestBody.salesOrderId
-            let itemDetails = requestBody.itemDetails;
-
-            if (!salesOrderId || !itemDetails || !Array.isArray(itemDetails)) {
-                throw error.create({
-                    name: 'MISSING_REQUIRED_PARAMETERS',
-                    message: 'Sales Order ID and item details are required and item details should be an array.',
-                    notifyOff: false
-                });
-            }
             try {
+
+                let salesOrderId = requestBody.salesOrderId
+                let itemDetails = requestBody.itemDetails;
+
+                if (!salesOrderId || !itemDetails || !Array.isArray(itemDetails)) {
+
+                    return { error: 'Sales Order ID and item details are required and item details should be an array.' }
+                }
+            
                 if(requestBody){
                 
 
@@ -59,6 +58,20 @@ define(['N/record', 'N/error'],
                         toType : record.Type.ITEM_FULFILLMENT,
                         isDynamic : true
                     });
+
+                    let allItemsFound = itemDetails.every(itemDetail => {
+                        let lineNum = salesOrderFulfill.findSublistLineWithValue({
+                            sublistId: 'item',
+                            fieldId: 'item',
+                            value: itemDetail.itemId
+                        });
+                        return lineNum !== -1;
+                    });
+
+                    if (!allItemsFound) {
+
+                        return { error: 'One or more items in the itemDetails are not found in the Item Fulfillment record.' }
+                    }
                     
                     itemDetails.forEach(itemDetail => {
                         let lineNum = salesOrderFulfill.findSublistLineWithValue({
